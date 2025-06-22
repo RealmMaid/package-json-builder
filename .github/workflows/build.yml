@@ -1,5 +1,5 @@
 # .github/workflows/build.yml
-# Our magical recipe, now updated with all the new, shiny tools!
+# Our magical recipe, now with the fix to make the robot happy!
 
 name: Build & Release Package Builder
 
@@ -20,19 +20,19 @@ jobs:
         os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
-      # Step 1: Check out your code from GitHub (Updated to v4!)
+      # Step 1: Check out your code from GitHub
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js and Yarn (Updated to v4!)
+      # Step 2: Set up Node.js and Yarn
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'yarn'
 
-      # Step 3: Enable Corepack so it uses the right Yarn version!
-      - name: Enable Corepack
+      # Step 3: Enable Corepack! This is the magic fix!
+      - name: Enable Corepack to use the correct Yarn version
         run: corepack enable
 
       # Step 4: Install all the app's dependencies
@@ -43,7 +43,7 @@ jobs:
       - name: Build application
         run: yarn dist
       
-      # Step 6: Upload the finished product! (Updated to v4!)
+      # Step 6: Upload the finished product!
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
