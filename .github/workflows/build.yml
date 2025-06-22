@@ -1,5 +1,5 @@
 # .github/workflows/build.yml
-# Okay, new plan! We're going to do this the simple, clean, and CORRECT way!
+# Okay, this is the one! Using the official, recommended way to set the Yarn version!
 
 name: Build & Release Package Builder
 
@@ -21,25 +21,27 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js and Yarn (The RIGHT Way!)
-      # This single step will:
-      #  - Install Node.js v18
-      #  - Automatically enable Corepack
-      #  - Read your package.json and set up the correct Yarn version (4.9.2!)
-      - name: Set up Node.js and Yarn
+      # Step 2: Set up Node.js and explicitly set Yarn version
+      # This is the magic bullet! The 'package-manager' input is the most
+      # reliable way to tell the runner to use Corepack to set a specific Yarn version.
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'yarn'
 
+      - name: Enable Corepack and set Yarn version
+        run: |
+          corepack enable
+          corepack prepare yarn@4.9.2 --activate
+
       # Step 3: Install dependencies
-      # This will now use the correct version of Yarn!
+      # This will now use the correct version of Yarn that was just set up!
       - name: Install dependencies
         run: yarn install --immutable
 
       # Step 4: Build the distributable files!
-      # We just run 'yarn dist'. The matrix makes sure it only builds
-      # for the OS it's currently running on (Windows builds .exe, etc.)
+      # 'yarn dist' will now run in the correct environment on each OS.
       - name: Build application
         run: yarn dist
       
