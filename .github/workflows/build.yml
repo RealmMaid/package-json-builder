@@ -1,19 +1,18 @@
 # .github/workflows/build.yml
-# Our magical recipe, now with the fix to make the robot happy!
+# Our magical recipe, with an extra dash of assertiveness to make the robot behave!
 
 name: Build & Release Package Builder
 
 # This tells the robot WHEN to run.
-# It runs every time you push code to the 'main' branch.
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  # This is the name of our job, you can call it whatever you want!
+  # This is the name of our job!
   build-and-release:
     
-    # This says "please run this job on a Windows, macOS, AND Linux computer!"
+    # Run on all three platforms!
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -31,17 +30,21 @@ jobs:
           node-version: 18
           cache: 'yarn'
 
-      # Step 3: Enable Corepack! This is the magic fix!
+      # Step 3: Enable Corepack!
+      # We're telling it to use the 'bash' shell to be extra clear!
       - name: Enable Corepack to use the correct Yarn version
         run: corepack enable
+        shell: bash
 
       # Step 4: Install all the app's dependencies
       - name: Install dependencies
         run: yarn install
+        shell: bash
 
       # Step 5: Build the distributable files!
       - name: Build application
         run: yarn dist
+        shell: bash
       
       # Step 6: Upload the finished product!
       - name: Upload Artifacts
