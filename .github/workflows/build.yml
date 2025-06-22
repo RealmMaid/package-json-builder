@@ -1,5 +1,5 @@
 # .github/workflows/build.yml
-# Okay, this time we're not asking nicely! We're TELLING the robot what to do!
+# Okay, we're telling the robot to not give up so easily this time!
 
 name: Build & Release Package Builder
 
@@ -12,6 +12,9 @@ jobs:
     
     runs-on: ${{ matrix.os }}
     strategy:
+      # This is the new magic! It tells GitHub to let all jobs finish,
+      # even if one of them fails. So we can see the real error for each one!
+      fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
 
@@ -27,9 +30,6 @@ jobs:
           node-version: 18
 
       # Step 3: Force the correct Yarn version!
-      # This is the new magic! We're telling npm to install the right
-      # version of Yarn globally, which will override the robot's old,
-      # dusty version for all the next steps!
       - name: Install and set the correct Yarn version
         run: |
           npm install -g yarn@4.9.2
