@@ -3,12 +3,18 @@
   "version": "1.0.0",
   "description": "A tool to help build and manage package.json files.",
   "main": "main.js",
-  "author": "OkayGift",
-  "repository": "https://github.com/RealmMaid/package-builder",
+  "author": {
+    "name": "RealmMaid",
+    "url": "https://github.com/RealmMaid",
+    "email": "admin@realmmaid.com"
+  },
   "license": "MIT",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder -wml"
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
   },
   "devDependencies": {
     "electron": "^28.2.3",
@@ -21,27 +27,17 @@
       "output": "dist"
     },
     "win": {
-      "target": [
-        "nsis",
-        "portable"
-      ]
+      "target": "nsis"
     },
     "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ]
+      "target": "dmg"
     },
     "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ]
+      "target": "AppImage"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
     }
-  },
-  "packageManager": "yarn@4.9.2+sha512.1fc009bc09d13cfd0e19efa44cbfc2b9cf6ca61482725eb35bbc5e257e093ebf4130db6dfe15d604ff4b79efd8e1e8e99b25fa7d0a6197c9f9826358d4d65c3c"
+  }
 }
