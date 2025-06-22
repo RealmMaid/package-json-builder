@@ -1,5 +1,5 @@
 # .github/workflows/build.yml
-# Okay, this is the one! Using the official, recommended way to set the Yarn version!
+# Okay, this is the one! Using the official, most robust way to set the Yarn version!
 
 name: Build & Release Package Builder
 
@@ -21,31 +21,28 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js and explicitly set Yarn version
-      # This is the magic bullet! The 'package-manager' input is the most
-      # reliable way to tell the runner to use Corepack to set a specific Yarn version.
+      # Step 2: Set up Node.js. We won't try to cache here.
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'yarn'
 
-      - name: Enable Corepack and set Yarn version
-        run: |
-          corepack enable
-          corepack prepare yarn@4.9.2 --activate
+      # Step 3: Enable Corepack & Set Yarn Version
+      # By running this in its own step with bash, we ensure it's set up
+      # correctly before we try to install anything.
+      - name: Enable Corepack and Set Yarn Version
+        run: corepack enable && yarn set version 4.9.2
+        shell: bash
 
-      # Step 3: Install dependencies
-      # This will now use the correct version of Yarn that was just set up!
+      # Step 4: Install dependencies using the now-correct Yarn
       - name: Install dependencies
         run: yarn install --immutable
 
-      # Step 4: Build the distributable files!
-      # 'yarn dist' will now run in the correct environment on each OS.
+      # Step 5: Build the distributable files!
       - name: Build application
         run: yarn dist
       
-      # Step 5: Upload the finished product!
+      # Step 6: Upload the finished product!
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
