@@ -8,6 +8,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   publishPackage: (directory) => ipcRenderer.send('npm:publish', directory),
   onPublishOutput: (callback) => ipcRenderer.on('npm:publish-output', (_event, value) => callback(value)),
 
-  // NEW: Function to get full package details for compatibility check
+  // Function to get full package details
   getPackageDetails: (packageName) => ipcRenderer.invoke('npm:getPackageDetails', packageName),
+
+  // Updated screenshot function that sends the page size!
+  takeScreenshot: (pageRect) => ipcRenderer.invoke('app:take-screenshot', pageRect)
 });

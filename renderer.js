@@ -1,4 +1,4 @@
-// renderer.js - Now with super-smart compatibility checking!
+// renderer.js - Now with super-smart compatibility checking and a selfie camera!
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- State Variables ---
@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const outputPre = document.getElementById('output');
     const copyBtn = document.getElementById('copyBtn');
     const downloadBtn = document.getElementById('downloadBtn');
+    const screenshotBtn = document.getElementById('screenshotBtn');
     const loadingIndicator = document.getElementById('loadingIndicator');
     const selectFolderBtn = document.getElementById('selectFolderBtn');
     const selectedFolderP = document.getElementById('selectedFolder');
@@ -238,6 +239,18 @@ document.addEventListener('DOMContentLoaded', () => {
         publishOutputPre.textContent = `Starting publish process for ${selectedFolderPath}...\n\n`;
         window.electronAPI.publishPackage(selectedFolderPath);
     };
+    
+    const handleScreenshot = async () => {
+        // This is the magic! Get the full height of the page, not just the window.
+        const pageRect = { height: document.body.scrollHeight };
+        const result = await window.electronAPI.takeScreenshot(pageRect);
+        
+        if (result.success) {
+            showToast(`Screenshot saved to ${result.path}`);
+        } else if(result.error) {
+            alert(`Oopsie! Couldn't take screenshot: ${result.error}`);
+        }
+    };
 
     // --- Event Listeners ---
     projectNameInput.addEventListener('input', updateProjectDetails);
@@ -249,6 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     npmSearchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSearchNPM(); });
     copyBtn.addEventListener('click', handleCopy);
     downloadBtn.addEventListener('click', handleDownload);
+    screenshotBtn.addEventListener('click', handleScreenshot);
     selectFolderBtn.addEventListener('click', handleSelectFolder);
     publishBtn.addEventListener('click', handlePublish);
     window.electronAPI.onPublishOutput((output) => {
