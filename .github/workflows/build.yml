@@ -1,45 +1,43 @@
 # .github/workflows/build.yml
-# Our magical recipe, with an extra dash of assertiveness to make the robot behave!
+# Okay, this time we're not asking nicely! We're TELLING the robot what to do!
 
 name: Build & Release Package Builder
 
-# This tells the robot WHEN to run.
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  # This is the name of our job!
   build-and-release:
     
-    # Run on all three platforms!
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
-      # Step 1: Check out your code from GitHub
+      # Step 1: Check out your code
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      # Step 2: Enable Corepack FIRST!
-      # This is the real magic trick! We enable it before setting up Node,
-      # so that when the Node setup runs, it sees Corepack is active
-      # and will automatically use the correct Yarn version from your package.json!
-      - name: Enable Corepack
-        run: corepack enable
-
-      # Step 3: Set up Node.js. It will now respect the enabled Corepack.
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'yarn'
 
-      # Step 4: Install all the app's dependencies
+      # Step 3: Force the correct Yarn version!
+      # This is the new magic! We're telling npm to install the right
+      # version of Yarn globally, which will override the robot's old,
+      # dusty version for all the next steps!
+      - name: Install and set the correct Yarn version
+        run: |
+          npm install -g yarn@4.9.2
+          corepack enable
+
+      # Step 4: Install dependencies using the correct Yarn
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --immutable
 
       # Step 5: Build the distributable files!
       - name: Build application
