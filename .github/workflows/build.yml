@@ -1,5 +1,5 @@
 # .github/workflows/build.yml
-# Okay, we're telling the robot to not give up so easily this time!
+# Okay, new plan! We're going to do this the simple, clean, and CORRECT way!
 
 name: Build & Release Package Builder
 
@@ -12,8 +12,6 @@ jobs:
     
     runs-on: ${{ matrix.os }}
     strategy:
-      # This is the new magic! It tells GitHub to let all jobs finish,
-      # even if one of them fails. So we can see the real error for each one!
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
@@ -23,27 +21,29 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
+      # Step 2: Set up Node.js and Yarn (The RIGHT Way!)
+      # This single step will:
+      #  - Install Node.js v18
+      #  - Automatically enable Corepack
+      #  - Read your package.json and set up the correct Yarn version (4.9.2!)
+      - name: Set up Node.js and Yarn
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'yarn'
 
-      # Step 3: Force the correct Yarn version!
-      - name: Install and set the correct Yarn version
-        run: |
-          npm install -g yarn@4.9.2
-          corepack enable
-
-      # Step 4: Install dependencies using the correct Yarn
+      # Step 3: Install dependencies
+      # This will now use the correct version of Yarn!
       - name: Install dependencies
         run: yarn install --immutable
 
-      # Step 5: Build the distributable files!
+      # Step 4: Build the distributable files!
+      # We just run 'yarn dist'. The matrix makes sure it only builds
+      # for the OS it's currently running on (Windows builds .exe, etc.)
       - name: Build application
         run: yarn dist
       
-      # Step 6: Upload the finished product!
+      # Step 5: Upload the finished product!
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
