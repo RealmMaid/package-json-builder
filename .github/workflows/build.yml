@@ -1,5 +1,5 @@
 # .github/workflows/build.yml
-# This is our magical recipe for the GitHub robot!
+# Our magical recipe, now updated with all the new, shiny tools!
 
 name: Build & Release Package Builder
 
@@ -14,41 +14,35 @@ jobs:
   build-and-release:
     
     # This says "please run this job on a Windows, macOS, AND Linux computer!"
-    # It will run three separate jobs at the same time! So efficient!
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
-      # Step 1: Check out your code from GitHub
+      # Step 1: Check out your code from GitHub (Updated to v4!)
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js and Yarn so we can run our commands
-      # It uses Node.js version 18, which is super stable!
+      # Step 2: Set up Node.js and Yarn (Updated to v4!)
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'yarn'
 
       # Step 3: Install all the app's dependencies
-      # It's just like running 'yarn install' on your own computer!
       - name: Install dependencies
         run: yarn install
 
       # Step 4: Build the distributable files!
-      # This runs our 'yarn dist' command. The robot knows which OS it's on
-      # and will only build the right files for that system.
       - name: Build application
         run: yarn dist
       
-      # Step 5: Upload the finished product!
-      # This takes the built files (like the .exe) and attaches them
-      # to the workflow run page on GitHub so you can download them.
+      # Step 5: Upload the finished product! (Updated to v4!)
+      # This is the one that was causing the error! All fixed now!
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: package-builder-${{ matrix.os }}
           path: dist/
