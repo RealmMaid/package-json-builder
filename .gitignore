@@ -1,0 +1,56 @@
+# Created by your friendly coding partner! <3
+
+# Dependencies
+# This is the big folder where all your downloaded packages live.
+# It can get super huge, and anyone can get these just by running `yarn install`.
+/node_modules
+
+# Yarn 2+ / Berry
+# These are special folders Yarn uses for its Plug'n'Play magic.
+# We definitely don't want these in our repo!
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# More Yarn files to ignore
+.pnp.*
+
+# Build output
+# This is where our shiny new .exe and .dmg files will go when we build the app.
+# We only want to commit the source code, not the finished product.
+/dist/
+
+# Logs
+# Log files are just for debugging and change all the time.
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Environment variables
+# This file often holds secrets and API keys! Never, ever commit this!
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Operating System generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE / Editor specific files
+.idea
+.vscode/
+*.swp
+*~
