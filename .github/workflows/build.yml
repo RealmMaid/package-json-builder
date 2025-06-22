@@ -31,16 +31,19 @@ jobs:
           node-version: 18
           cache: 'yarn'
 
-      # Step 3: Install all the app's dependencies
+      # Step 3: Enable Corepack so it uses the right Yarn version!
+      - name: Enable Corepack
+        run: corepack enable
+
+      # Step 4: Install all the app's dependencies
       - name: Install dependencies
         run: yarn install
 
-      # Step 4: Build the distributable files!
+      # Step 5: Build the distributable files!
       - name: Build application
         run: yarn dist
       
-      # Step 5: Upload the finished product! (Updated to v4!)
-      # This is the one that was causing the error! All fixed now!
+      # Step 6: Upload the finished product! (Updated to v4!)
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
